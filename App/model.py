@@ -133,9 +133,9 @@ def req_1(data_structs, initialDate, finalDate):
     a = [lt.getElement(lst,1),
          lt.getElement(lst,2),
          lt.getElement(lst,3),
-         lt.getElement(lst,4),
-         lt.getElement(lst,5),
-         lt.getElement(lst,6),]
+         lt.getElement(lst,lt.size(lst)-2),
+         lt.getElement(lst,lt.size(lst)-1),
+         lt.getElement(lst,lt.size(lst))]
     return a
 
 
