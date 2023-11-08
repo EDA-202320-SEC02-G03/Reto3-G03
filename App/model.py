@@ -39,6 +39,7 @@ from DISClib.Algorithms.Sorting import insertionsort as ins
 from DISClib.Algorithms.Sorting import selectionsort as se
 from DISClib.Algorithms.Sorting import mergesort as merg
 from DISClib.Algorithms.Sorting import quicksort as quk
+import datetime
 assert cf
 
 """
@@ -54,9 +55,11 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
-    #TODO: Inicializar las estructuras de datos
-    pass
+    data = {"fechas": None}
 
+    data["fechas"] = om.newMap(omaptype="RBT")
+
+    return data
 
 # Funciones para agregar informacion al modelo
 
@@ -64,9 +67,8 @@ def add_data(data_structs, data):
     """
     Función para agregar nuevos elementos a la lista
     """
-    #TODO: Crear la función para agregar elementos a una lista
-    pass
-
+    updateDateIndex(data_structs["fechas"], data)
+    return data_structs
 
 # Funciones para creacion de datos
 
@@ -76,6 +78,33 @@ def new_data(id, info):
     """
     #TODO: Crear la función para estructurar los datos
     pass
+
+def newDataEntry(sismo):
+    """
+    Crea una entrada en el indice por fechas, es decir en el arbol
+    binario.
+    """
+    entry = {"sismos": None}
+    entry["sismos"] = lt.newList("ARRAY_LIST", compare_dates)
+    lt.addLast(entry["sismos"], sismo)
+    return entry
+
+def updateDateIndex(map, sismo):
+    """
+    Se toma la fecha del sismo y se busca si ya existe en el arbol
+    dicha fecha.  Si es asi, se adiciona a su lista de sismos.
+    """
+    occurreddate = sismo["time"]
+    date = datetime.datetime.strptime(occurreddate, "%Y-%m-%dT%H:%M:%S.%fZ")
+    entry = om.get(map, date.date())
+    if entry is None:
+        datentry = newDataEntry(sismo)
+        om.put(map, date.date(), datentry)
+    else:
+        datentry = me.getValue(entry)
+    lst = datentry["sismos"]
+    lt.addLast(lst, sismo)
+    return map
 
 
 # Funciones de consulta
@@ -168,6 +197,17 @@ def compare(data_1, data_2):
     """
     #TODO: Crear función comparadora de la lista
     pass
+
+def compare_dates(date1, date2):
+    """
+    Compara dos fechas
+    """
+    if (date1 == date2):
+        return 0
+    elif (date1 > date2):
+        return 1
+    else:
+        return -1
 
 # Funciones de ordenamiento
 

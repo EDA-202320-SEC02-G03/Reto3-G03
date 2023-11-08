@@ -39,13 +39,14 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
+filename = "earthquakes//temblores-utf8-small.csv"
 
 def new_controller():
     """
         Se crea una instancia del controlador
     """
-    #TODO: Llamar la función del controlador donde se crean las estructuras de datos
-    pass
+    a = controller.new_controller()
+    return a
 
 
 def print_menu():
@@ -66,9 +67,8 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos
-    pass
-
+    a = controller.load_data(control, filename)
+    return a 
 
 def print_data(control, id):
     """
