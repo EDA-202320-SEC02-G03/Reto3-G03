@@ -55,9 +55,11 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
-    data = {"fechas": None}
+    data = {"fechas": None,
+            "magnitudes": None}
 
     data["fechas"] = om.newMap(omaptype="RBT")
+    data["magnitudes"] = om.newMap(omaptype="RBT")
 
     return data
 
@@ -68,6 +70,7 @@ def add_data(data_structs, data):
     Función para agregar nuevos elementos a la lista
     """
     updateDateIndex(data_structs["fechas"], data)
+
     return data_structs
 
 # Funciones para creacion de datos
@@ -85,7 +88,7 @@ def newDataEntry(sismo):
     binario.
     """
     entry = {"sismos": None}
-    entry["sismos"] = lt.newList("ARRAY_LIST", compare_dates)
+    entry["sismos"] = lt.newList("ARRAY_LIST")
     lt.addLast(entry["sismos"], sismo)
     return entry
 
@@ -105,6 +108,19 @@ def updateDateIndex(map, sismo):
     lst = datentry["sismos"]
     lt.addLast(lst, sismo)
     return map
+
+def updateMagIndex(map, sismo):
+    mag = sismo["mag"]
+    entry = om.get(map, mag)
+    if entry is None:
+        datentry = newDataEntry(sismo)
+        om.put(map, mag, datentry)
+    else:
+        datentry = me.getValue(entry)
+    lst = datentry["sismos"]
+    lt.addLast(lst, sismo)
+    return map
+
 
 
 # Funciones de consulta
@@ -130,7 +146,7 @@ def req_1(data_structs, initialDate, finalDate):
     Función que soluciona el requerimiento 1
     """
     lst = om.values(data_structs["fechas"], initialDate, finalDate)
-    a = [lt.getElement(lst,1),
+    a = [lt.getElement(lt.getElement(lst,1)["sismos"],1),
          lt.getElement(lst,2),
          lt.getElement(lst,3),
          lt.getElement(lst,lt.size(lst)-2),
@@ -139,12 +155,18 @@ def req_1(data_structs, initialDate, finalDate):
     return a
 
 
-def req_2(data_structs):
+def req_2(data_structs, mag_ini, mag_fin):
     """
     Función que soluciona el requerimiento 2
     """
-    # TODO: Realizar el requerimiento 2
-    pass
+    lst = om.values(data_structs["magnitudes"], mag_ini, mag_fin)
+    a = [lt.getElement(lt.getElement(lst,1)["sismos"],1),
+         lt.getElement(lst,2),
+         lt.getElement(lst,3),
+         lt.getElement(lst,lt.size(lst)-2),
+         lt.getElement(lst,lt.size(lst)-1),
+         lt.getElement(lst,lt.size(lst))]
+    return a
 
 
 def req_3(data_structs):
