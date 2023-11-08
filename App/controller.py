@@ -25,6 +25,8 @@ import model
 import time
 import csv
 import tracemalloc
+csv.field_size_limit(2147483647)
+
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -36,17 +38,22 @@ def new_controller():
     Crea una instancia del modelo
     """
     #TODO: Llamar la función del modelo que crea las estructuras de datos
-    pass
+    analyzer = model.new_data_structs()
+    return analyzer
 
 
 # Funciones para la carga de datos
 
-def load_data(control, filename):
+def loadData(analyzer, sismofile):
     """
-    Carga los datos del reto
+    Carga los datos de los archivos CSV en el modelo
     """
-    # TODO: Realizar la carga de datos
-    pass
+    sismofile = cf.data_dir + sismofile
+    input_file = csv.DictReader(open(sismofile, encoding="utf-8"),
+                                delimiter=",")
+    for sismo in input_file:
+        model.addsismo(analyzer, sismo)
+    return analyzer
 
 
 # Funciones de ordenamiento
@@ -169,3 +176,4 @@ def delta_memory(stop_memory, start_memory):
     # de Byte -> kByte
     delta_memory = delta_memory/1024.0
     return delta_memory
+
