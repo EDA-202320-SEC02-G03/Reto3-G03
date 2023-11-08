@@ -30,6 +30,7 @@ from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 assert cf
 from tabulate import tabulate
+import datetime
 import traceback
 
 """
@@ -81,9 +82,14 @@ def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
-
+    initialDate = input("Fecha inicial: ")
+    inicial = datetime.datetime.strptime(initialDate, "%Y-%m-%dT%H:%M")
+    i = inicial.date()
+    finalDate = input("Fecha final: ")
+    final = datetime.datetime.strptime(finalDate, "%Y-%m-%dT%H:%M")
+    f = final.date()
+    a = controller.req_1(control, i, f)
+    return print(a)
 
 def print_req_2(control):
     """

@@ -125,12 +125,18 @@ def data_size(data_structs):
     pass
 
 
-def req_1(data_structs):
+def req_1(data_structs, initialDate, finalDate):
     """
     Función que soluciona el requerimiento 1
     """
-    # TODO: Realizar el requerimiento 1
-    pass
+    lst = om.values(data_structs["fechas"], initialDate, finalDate)
+    a = [lt.getElement(lst,1),
+         lt.getElement(lst,2),
+         lt.getElement(lst,3),
+         lt.getElement(lst,4),
+         lt.getElement(lst,5),
+         lt.getElement(lst,6),]
+    return a
 
 
 def req_2(data_structs):
