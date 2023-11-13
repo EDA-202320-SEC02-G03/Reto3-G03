@@ -39,6 +39,7 @@ from DISClib.Algorithms.Sorting import insertionsort as ins
 from DISClib.Algorithms.Sorting import selectionsort as se
 from DISClib.Algorithms.Sorting import mergesort as merg
 from DISClib.Algorithms.Sorting import quicksort as quk
+from tabulate import tabulate
 import datetime
 assert cf
 
@@ -70,6 +71,7 @@ def add_data(data_structs, data):
     Función para agregar nuevos elementos a la lista
     """
     updateDateIndex(data_structs["fechas"], data)
+    updateMagIndex(data_structs["magnitudes"], data)
 
     return data_structs
 
@@ -105,20 +107,20 @@ def updateDateIndex(map, sismo):
         om.put(map, date.date(), datentry)
     else:
         datentry = me.getValue(entry)
-    lst = datentry["sismos"]
-    lt.addLast(lst, sismo)
+        lst = datentry["sismos"]
+        lt.addLast(lst, sismo)
     return map
 
 def updateMagIndex(map, sismo):
-    mag = sismo["mag"]
+    mag = float(sismo["mag"])
     entry = om.get(map, mag)
     if entry is None:
         datentry = newDataEntry(sismo)
         om.put(map, mag, datentry)
     else:
         datentry = me.getValue(entry)
-    lst = datentry["sismos"]
-    lt.addLast(lst, sismo)
+        lst = datentry["sismos"]
+        lt.addLast(lst, sismo)
     return map
 
 
@@ -146,13 +148,32 @@ def req_1(data_structs, initialDate, finalDate):
     Función que soluciona el requerimiento 1
     """
     lst = om.values(data_structs["fechas"], initialDate, finalDate)
-    a = [lt.getElement(lt.getElement(lst,1)["sismos"],1),
-         lt.getElement(lst,2),
-         lt.getElement(lst,3),
-         lt.getElement(lst,lt.size(lst)-2),
-         lt.getElement(lst,lt.size(lst)-1),
-         lt.getElement(lst,lt.size(lst))]
-    return a
+    x = lt.newList("ARRAY_LIST")
+    for cada in lt.iterator(lst):
+        for elements in lt.iterator(cada["sismos"]):
+            lt.addLast(x, elements)
+    a = [lt.getElement(x,lt.size(x)),
+         lt.getElement(x,lt.size(x)-1),
+         lt.getElement(x,lt.size(x)-2),
+         lt.getElement(x,3),
+         lt.getElement(x,2),
+         lt.getElement(x,1)]
+    head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    k = []
+    for seis in a:
+        l = {}
+        for header in head:
+            l[header] = seis[header]
+        
+        m = tabulate([l], headers="keys", tablefmt="grid")
+        date = seis["time"]
+        events = 1
+        lista = [date, events, m]
+        k.append(lista)
+    
+    t = tabulate(k, headers=["time","events","details"], tablefmt="grid")
+    
+    return t
 
 
 def req_2(data_structs, mag_ini, mag_fin):
@@ -160,13 +181,32 @@ def req_2(data_structs, mag_ini, mag_fin):
     Función que soluciona el requerimiento 2
     """
     lst = om.values(data_structs["magnitudes"], mag_ini, mag_fin)
-    a = [lt.getElement(lt.getElement(lst,1)["sismos"],1),
-         lt.getElement(lst,2),
-         lt.getElement(lst,3),
-         lt.getElement(lst,lt.size(lst)-2),
+    
+    a = [lt.getElement(lst,lt.size(lst)),
          lt.getElement(lst,lt.size(lst)-1),
-         lt.getElement(lst,lt.size(lst))]
-    return a
+         lt.getElement(lst,lt.size(lst)-2),
+         lt.getElement(lst,3),
+         lt.getElement(lst,2),
+         lt.getElement(lst,1)]
+    head = ["time", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    k = []
+    for elementos in a:
+        x = elementos["sismos"]
+        t = []
+        for cada_uno in lt.iterator(x):
+            l = []
+            for header in head:
+                l.append(cada_uno[header])
+            t.append(l)
+        mag = lt.getElement(x, 1)["mag"]
+        events = lt.size(x)
+        m = tabulate(t, headers=head, tablefmt="grid")
+        lista = [mag, events, m]
+        k.append(lista)    
+    
+    
+    t = tabulate(k, headers=["mag","events","details"], tablefmt="grid")
+    return t
 
 
 def req_3(data_structs):

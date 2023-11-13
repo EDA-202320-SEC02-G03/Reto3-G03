@@ -80,13 +80,12 @@ def req_1(control, initialDate, finalDate):
     a = model.req_1(control, initialDate, finalDate)
     return a
 
-def req_2(control):
+def req_2(control, mag_ini, mag_fin):
     """
     Retorna el resultado del requerimiento 2
     """
-    # TODO: Modificar el requerimiento 2
-    pass
-
+    a = model.req_2(control, mag_ini, mag_fin)
+    return a
 
 def req_3(control):
     """

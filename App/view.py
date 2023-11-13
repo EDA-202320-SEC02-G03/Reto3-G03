@@ -40,7 +40,7 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-filename = "earthquakes//temblores-utf8-small.csv"
+filename = "earthquakes//temblores-utf8-large.csv"
 
 def new_controller():
     """
@@ -95,9 +95,10 @@ def print_req_2(control):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
-
+    mag_ini = float(input("Magnitud inicial: "))
+    mag_fin = float(input("Magnitud final: "))
+    a = controller.req_2(control, mag_ini, mag_fin)
+    return print(a)
 
 def print_req_3(control):
     """
