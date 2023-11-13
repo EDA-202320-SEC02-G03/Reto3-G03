@@ -95,13 +95,12 @@ def req_3(control):
     pass
 
 
-def req_4(control):
+def req_4(control, sig, distancia):
     """
     Retorna el resultado del requerimiento 4
     """
-    # TODO: Modificar el requerimiento 4
-    pass
-
+    a = model.req_4(control, sig, distancia)
+    return a
 
 def req_5(control):
     """
@@ -118,13 +117,12 @@ def req_6(control):
     pass
 
 
-def req_7(control):
+def req_7(control, año, titulo, propiedad, bins):
     """
     Retorna el resultado del requerimiento 7
     """
-    # TODO: Modificar el requerimiento 7
-    pass
-
+    a = model.req_7(control, año, titulo, propiedad, bins)
+    return a
 
 def req_8(control):
     """

@@ -32,6 +32,7 @@ assert cf
 from tabulate import tabulate
 import datetime
 import traceback
+import matplotlib.pyplot as plt
 
 """
 La vista se encarga de la interacción con el usuario
@@ -40,7 +41,7 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-filename = "earthquakes//temblores-utf8-large.csv"
+filename = "earthquakes//temblores-utf8-small.csv"
 
 def new_controller():
     """
@@ -112,9 +113,10 @@ def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 4
-    pass
-
+    sig = int(input("Ingrese la significancia minima: "))
+    distancia = float(input("Ingrese la distancia azimutal maxima: "))
+    a = controller.req_4(control, sig, distancia)
+    return print(a)
 
 def print_req_5(control):
     """
@@ -136,9 +138,13 @@ def print_req_7(control):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
-
+    año = "2020"
+    titulo = "Alaska"
+    propiedad = "mag"
+    bins = 10
+    a = controller.req_7(control, año, titulo, propiedad, bins)
+    plt.imshow(a)
+    return print(a)
 
 def print_req_8(control):
     """

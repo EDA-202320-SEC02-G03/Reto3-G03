@@ -41,6 +41,7 @@ from DISClib.Algorithms.Sorting import mergesort as merg
 from DISClib.Algorithms.Sorting import quicksort as quk
 from tabulate import tabulate
 import datetime
+import matplotlib.pyplot as plt
 assert cf
 
 """
@@ -56,11 +57,17 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
-    data = {"fechas": None,
-            "magnitudes": None}
+    data = {"times": None,
+            "magnitudes": None,
+            "significance": None,
+            "fechas": None}
 
-    data["fechas"] = om.newMap(omaptype="RBT")
+    data["times"] = om.newMap(omaptype="RBT")
     data["magnitudes"] = om.newMap(omaptype="RBT")
+    data["significance"] = om.newMap(omaptype="RBT")
+    data["fechas"] = mp.newMap(50000,
+                                   maptype='CHAINING',
+                                   loadfactor=4)
 
     return data
 
@@ -70,8 +77,10 @@ def add_data(data_structs, data):
     """
     Función para agregar nuevos elementos a la lista
     """
-    updateDateIndex(data_structs["fechas"], data)
+    updateDateIndex(data_structs["times"], data)
     updateMagIndex(data_structs["magnitudes"], data)
+    updateSigIndex(data_structs["significance"], data)
+    addFechas(data_structs["fechas"], data)
 
     return data_structs
 
@@ -123,7 +132,44 @@ def updateMagIndex(map, sismo):
         lt.addLast(lst, sismo)
     return map
 
+def updateSigIndex(map, sismo):
+    sig = int(sismo["sig"])
+    entry = om.get(map, sig)
+    if entry is None:
+        datentry = newDataEntry(sismo)
+        om.put(map, sig, datentry)
+    else:
+        datentry = me.getValue(entry)
+        lst = datentry["sismos"]
+        lt.addLast(lst, sismo)
+    return map
 
+def updateDistanceIndex(map, sismo):
+    gap = float(sismo["gap"])
+    entry = om.get(map, gap)
+    if entry is None:
+        datentry = newDataEntry(sismo)
+        om.put(map, gap, datentry)
+    else:
+        datentry = me.getValue(entry)
+        lst = datentry["sismos"]
+        lt.addLast(lst, sismo)
+    return map
+
+def addFechas(data_structs, sismo):
+    fechas = data_structs
+    linea = sismo['time']
+    fecha = linea[0:4]
+    existe = mp.contains(fechas, fecha)
+    #existe retorna True o False
+    if existe:
+        pareja = mp.get(fechas, fecha)
+        valor = me.getValue(pareja)
+        lt.addLast(valor["sismos"],sismo)
+    else:
+        valor = newDataEntry(sismo)
+        mp.put(fechas, fecha, valor)
+    
 
 # Funciones de consulta
 
@@ -147,7 +193,7 @@ def req_1(data_structs, initialDate, finalDate):
     """
     Función que soluciona el requerimiento 1
     """
-    lst = om.values(data_structs["fechas"], initialDate, finalDate)
+    lst = om.values(data_structs["times"], initialDate, finalDate)
     x = lt.newList("ARRAY_LIST")
     for cada in lt.iterator(lst):
         for elements in lt.iterator(cada["sismos"]):
@@ -192,6 +238,16 @@ def req_2(data_structs, mag_ini, mag_fin):
     k = []
     for elementos in a:
         x = elementos["sismos"]
+        if lt.size(x) > 6:
+            z = lt.newList("ARRAY_LIST")
+            o = quk.sort(x, compare_dates)
+            lt.addLast(z,lt.getElement(o,lt.size(o)))
+            lt.addLast(z,lt.getElement(o,lt.size(o)-1))
+            lt.addLast(z,lt.getElement(o,lt.size(o)-2))
+            lt.addLast(z,lt.getElement(o,3))
+            lt.addLast(z,lt.getElement(o,2))
+            lt.addLast(z,lt.getElement(o,1))
+            x = z
         t = []
         for cada_uno in lt.iterator(x):
             l = []
@@ -217,13 +273,47 @@ def req_3(data_structs):
     pass
 
 
-def req_4(data_structs):
+def req_4(data_structs, sig, distancia):
     """
     Función que soluciona el requerimiento 4
     """
-    # TODO: Realizar el requerimiento 4
-    pass
-
+    lst = om.values(data_structs["significance"], sig, om.maxKey(data_structs["significance"]))
+    x = lt.newList("ARRAY_LIST")
+    for cada in lt.iterator(lst):
+        for elements in lt.iterator(cada["sismos"]):
+            lt.addLast(x, elements)
+    az = om.newMap(omaptype="RBT")
+    for cu in lt.iterator(x):
+        if cu["gap"] != "":
+            updateDistanceIndex(az, cu)
+    lst = om.values(az, om.minKey(az), distancia)
+    x = lt.newList("ARRAY_LIST")
+    for cada in lt.iterator(lst):
+        for elements in lt.iterator(cada["sismos"]):
+            lt.addLast(x, elements)
+    o = quk.sort(x, compare_dates)
+    a = [lt.getElement(o,lt.size(o)),
+         lt.getElement(o,lt.size(o)-1),
+         lt.getElement(o,lt.size(o)-2),
+         lt.getElement(o,3),
+         lt.getElement(o,2),
+         lt.getElement(o,1)]
+    head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    k = []
+    for seis in a:
+        l = {}
+        for header in head:
+            l[header] = seis[header]
+        
+        m = tabulate([l], headers="keys", tablefmt="grid")
+        date = seis["time"]
+        events = 1
+        lista = [date, events, m]
+        k.append(lista)
+    
+    t = tabulate(k, headers=["time","events","details"], tablefmt="grid")
+    
+    return t
 
 def req_5(data_structs):
     """
@@ -241,12 +331,20 @@ def req_6(data_structs):
     pass
 
 
-def req_7(data_structs):
+def req_7(data_structs, año, titulo, propiedad, bins):
     """
     Función que soluciona el requerimiento 7
     """
-    # TODO: Realizar el requerimiento 7
-    pass
+    x = lt.newList("ARRAY_LIST")
+    a = me.getValue(mp.get(data_structs["fechas"],año))
+    for cu in lt.iterator(a["sismos"]):
+        if titulo in cu["title"]:
+            lt.addLast(x,cu)
+    datos = []
+    for todos in lt.iterator(x):
+        datos.append(todos[propiedad])
+    pt = plt.hist(datos, bins, density=True)
+    return pt
 
 
 def req_8(data_structs):
@@ -270,12 +368,14 @@ def compare_dates(date1, date2):
     """
     Compara dos fechas
     """
-    if (date1 == date2):
-        return 0
-    elif (date1 > date2):
-        return 1
+    date1 = datetime.datetime.strptime(date1["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    date2 = datetime.datetime.strptime(date2["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    d1 = str(date1.date())
+    d2 = str(date2.date())
+    if (d1 < d2):
+        return d1<d2
     else:
-        return -1
+        return date1<date2
 
 # Funciones de ordenamiento
 
