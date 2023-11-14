@@ -298,21 +298,23 @@ def req_3(data_structs,magnitud,profundidad):
             lt.addLast(listadatos, m)
     lenght1 = lt.size(listadatos)
     listaorganizar= quk.sort(listadatos, compare_dates)
+    #Creacion Sublista primeros 10 Eventos
     listaprint = [lt.getElement(listaorganizar,lt.size(listaorganizar)),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-1),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-2),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-7),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-8),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-9)]
+    #Generacion tabulate
     head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
     n = []
-    for seis in listaprint:
+    for f in listaprint:
         l = {}
         for header in head:
-            l[header] = seis[header]
+            l[header] = f[header]
         
         m = tabulate([l], headers="keys", tablefmt="grid")
-        date = seis["time"]
+        date = f["time"]
         events = 1
         lista = [date, events, m]
         n.append(lista)
