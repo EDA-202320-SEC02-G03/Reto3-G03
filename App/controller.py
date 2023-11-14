@@ -87,13 +87,13 @@ def req_2(control, mag_ini, mag_fin):
     a = model.req_2(control, mag_ini, mag_fin)
     return a
 
-def req_3(control):
+def req_3(control,magnitud,profundidad):
     """
     Retorna el resultado del requerimiento 3
     """
     # TODO: Modificar el requerimiento 3
-    pass
-
+    a = model.req_3(control,magnitud,profundidad)
+    return a
 
 def req_4(control, sig, distancia):
     """

@@ -110,9 +110,10 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    pass
-
-
+    magnitud = float(4.7)
+    profundidad = float(10.0)
+    a = controller.req_3(control,magnitud,profundidad)
+    return print(a)
 def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola

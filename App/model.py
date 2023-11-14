@@ -169,6 +169,18 @@ def addFechas(data_structs, sismo):
     else:
         valor = newDataEntry(sismo)
         mp.put(fechas, fecha, valor)
+        
+def updateProfundidadIndex(map, sismo):
+    depth = float(sismo["depth"])
+    entry = om.get(map, depth)
+    if entry is None:
+        datentry = newDataEntry(sismo)
+        om.put(map, depth, datentry)
+    else:
+        datentry = me.getValue(entry)
+        lst = datentry["sismos"]
+        lt.addLast(lst, sismo)
+    return map
     
 
 # Funciones de consulta
@@ -265,12 +277,48 @@ def req_2(data_structs, mag_ini, mag_fin):
     return t
 
 
-def req_3(data_structs):
+def req_3(data_structs,magnitud,profundidad):
     """
     Función que soluciona el requerimiento 3
     """
     # TODO: Realizar el requerimiento 3
-    pass
+    listabrutos = om.values(data_structs["magnitudes"],magnitud, om.maxKey(data_structs["magnitudes"]))
+    listadatos = lt.newList("ARRAY_LIST")
+    for i in lt.iterator(listabrutos):
+        for j in lt.iterator(i["sismos"]):
+            lt.addLast(listadatos,j)
+    prof = om.newMap(omaptype="RBT")
+    for k in lt.iterator(listadatos):
+        if k["depth"] != "":
+            updateProfundidadIndex(prof, k)
+    listabrutos = om.values(prof, om.minKey(prof), profundidad)
+    listadatos = lt.newList("ARRAY_LIST")
+    for l in lt.iterator(listabrutos):
+        for m in lt.iterator(l["sismos"]):
+            lt.addLast(listadatos, m)
+    listaorganizar= quk.sort(listadatos, compare_dates)
+    listaprint = [lt.getElement(listaorganizar,lt.size(listaorganizar)),
+         lt.getElement(listaorganizar,lt.size(listaorganizar)-1),
+         lt.getElement(listaorganizar,lt.size(listaorganizar)-2),
+         lt.getElement(listaorganizar,3),
+         lt.getElement(listaorganizar,2),
+         lt.getElement(listaorganizar,1)]
+    head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    n = []
+    for seis in listaprint:
+        l = {}
+        for header in head:
+            l[header] = seis[header]
+        
+        m = tabulate([l], headers="keys", tablefmt="grid")
+        date = seis["time"]
+        events = 1
+        lista = [date, events, m]
+        n.append(lista)
+    
+    t = tabulate(n, headers=["time","events","details"], tablefmt="grid")
+    return t
+            
 
 
 def req_4(data_structs, sig, distancia):
