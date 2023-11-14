@@ -343,8 +343,25 @@ def req_7(data_structs, año, titulo, propiedad, bins):
     datos = []
     for todos in lt.iterator(x):
         datos.append(todos[propiedad])
-    pt = plt.hist(datos, bins, density=True)
-    return pt
+    datos.sort()
+    x = quk.sort(x,compare_dates)
+    o = [lt.getElement(x,lt.size(x)),
+         lt.getElement(x,lt.size(x)-1),
+         lt.getElement(x,lt.size(x)-2),
+         lt.getElement(x,3),
+         lt.getElement(x,2),
+         lt.getElement(x,1)]
+    k = []
+    head = ["time", "lat", "long", "title", "code", "mag"]
+    for seis in o:
+        l = {}
+        for header in head:
+            l[header] = seis[header]
+        k.append(l)
+    
+    t = tabulate(k, headers="keys", tablefmt="grid")
+    return (datos, t)
+    
 
 
 def req_8(data_structs):

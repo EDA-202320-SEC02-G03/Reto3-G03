@@ -143,8 +143,12 @@ def print_req_7(control):
     propiedad = "mag"
     bins = 10
     a = controller.req_7(control, año, titulo, propiedad, bins)
-    plt.imshow(a)
-    return print(a)
+    plt.hist(a[0], bins, density=True)
+    plt.title("Histogram of " + propiedad + " in " + titulo + " in " + año)
+    plt.xlabel(propiedad)
+    plt.ylabel("No. Events")
+    plt.show()
+    return print(a[1])
 
 def print_req_8(control):
     """
