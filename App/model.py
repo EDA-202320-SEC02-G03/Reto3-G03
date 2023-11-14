@@ -299,12 +299,14 @@ def req_3(data_structs,magnitud,profundidad):
             lt.addLast(listadatos, m)
     lenght1 = lt.size(listadatos)
     listaorganizar= quk.sort(listadatos, compare_dates)
+    #Sublista para imprimir
     listaprint = [lt.getElement(listaorganizar,lt.size(listaorganizar)),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-1),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-2),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-7),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-8),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-9)]
+    #Organizar Tabulate
     head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
     n = []
     for seis in listaprint:
