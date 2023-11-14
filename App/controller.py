@@ -92,8 +92,8 @@ def req_3(control,magnitud,profundidad):
     Retorna el resultado del requerimiento 3
     """
     # TODO: Modificar el requerimiento 3
-    a = model.req_3(control,magnitud,profundidad)
-    return a
+    a,length1 = model.req_3(control,magnitud,profundidad)
+    return a,length1
 
 def req_4(control, sig, distancia):
     """

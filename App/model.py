@@ -296,13 +296,14 @@ def req_3(data_structs,magnitud,profundidad):
     for l in lt.iterator(listabrutos):
         for m in lt.iterator(l["sismos"]):
             lt.addLast(listadatos, m)
+    lenght1 = lt.size(listadatos)
     listaorganizar= quk.sort(listadatos, compare_dates)
     listaprint = [lt.getElement(listaorganizar,lt.size(listaorganizar)),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-1),
          lt.getElement(listaorganizar,lt.size(listaorganizar)-2),
-         lt.getElement(listaorganizar,3),
-         lt.getElement(listaorganizar,2),
-         lt.getElement(listaorganizar,1)]
+         lt.getElement(listaorganizar,lt.size(listaorganizar)-7),
+         lt.getElement(listaorganizar,lt.size(listaorganizar)-8),
+         lt.getElement(listaorganizar,lt.size(listaorganizar)-9)]
     head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
     n = []
     for seis in listaprint:
@@ -317,7 +318,7 @@ def req_3(data_structs,magnitud,profundidad):
         n.append(lista)
     
     t = tabulate(n, headers=["time","events","details"], tablefmt="grid")
-    return t
+    return t,lenght1
             
 
 

@@ -110,9 +110,15 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    magnitud = float(4.7)
-    profundidad = float(10.0)
-    a = controller.req_3(control,magnitud,profundidad)
+    print("=============Req No. 3 Inputs =============")
+    magnitud = float(input("Min magnitud: "))
+    profundidad =float(input("Max Depth: "))
+    print("=============Req No. 3 Results =============")
+    a,length1 = controller.req_3(control,magnitud,profundidad)
+    print("Total different dates: ", length1)
+    print("Total events between dates:",length1)
+    print("Selectin the first 10 results...")
+    print("Counsult size: ", length1, "The first an last 3 of the 10 results are: ")
     return print(a)
 def print_req_4(control):
     """
