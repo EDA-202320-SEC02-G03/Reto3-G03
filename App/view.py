@@ -138,10 +138,10 @@ def print_req_7(control):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
-    año = "2020"
-    titulo = "Alaska"
-    propiedad = "mag"
-    bins = 10
+    año = str(input("Year: "))
+    titulo = str(input("Area of interest: "))
+    propiedad = str(input("property of interest (mag/ Depth/ sig): "))
+    bins = int(input("Number of bins: "))
     a = controller.req_7(control, año, titulo, propiedad, bins)
     plt.hist(a[0], bins, density=True)
     plt.title("Histogram of " + propiedad + " in " + titulo + " in " + año)
