@@ -43,6 +43,7 @@ from tabulate import tabulate
 import datetime
 import matplotlib.pyplot as plt
 assert cf
+import math
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá
@@ -372,13 +373,18 @@ def req_5(data_structs):
     pass
 
 
-def req_6(data_structs):
+def req_6(data_structs,año,latitud,longitud,radio,numevent):
     """
     Función que soluciona el requerimiento 6
     """
     # TODO: Realizar el requerimiento 6
-    pass
+    y = om.values(data_structs["times"],año,om.maxKey(data_structs["times"]))
+    x = lt.newList("ARRAY_LIST")
+    for i in lt.iterator(y):
+        for j in lt.iterator(i["sismos"]):
+            lt.addLast(x,j)
 
+    return x
 
 def req_7(data_structs, año, titulo, propiedad, bins):
     """

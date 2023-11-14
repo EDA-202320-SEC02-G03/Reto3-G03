@@ -109,12 +109,13 @@ def req_5(control):
     # TODO: Modificar el requerimiento 5
     pass
 
-def req_6(control):
+def req_6(control,año,latitud,longitud,radio,numevent):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    a = model.req_6(control,año,latitud,longitud,radio,numevent)
+    return a
 
 
 def req_7(control, año, titulo, propiedad, bins):
@@ -130,7 +131,6 @@ def req_8(control):
     """
     # TODO: Modificar el requerimiento 8
     pass
-
 
 # Funciones para medir tiempos de ejecucion
 

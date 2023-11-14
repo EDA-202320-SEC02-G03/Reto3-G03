@@ -33,7 +33,6 @@ from tabulate import tabulate
 import datetime
 import traceback
 import matplotlib.pyplot as plt
-
 """
 La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
@@ -142,8 +141,14 @@ def print_req_6(control):
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    pass
-
+    print("=============Req No. 6 Inputs =============")
+    año = 2022#int(input("Year: "))
+    latitud = 4.674#float(input("Focus Latitude: "))
+    longitud = -74.068#float(input("Focus Longitude: "))
+    radio = 3000.0#float(input("Relevant Radius: "),"[km]")
+    numevent = 5#input("Number of most important events: ")
+    a = controller.req_6(control,año,latitud,longitud,radio,numevent)
+    return print(a)
 
 def print_req_7(control):
     """
@@ -167,8 +172,7 @@ def print_req_8(control):
     """
     # TODO: Imprimir el resultado del requerimiento 8
     pass
-
-
+   
 # Se crea el controlador asociado a la vista
 control = new_controller()
 
