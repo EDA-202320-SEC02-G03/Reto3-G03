@@ -83,6 +83,7 @@ def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
+    start_time = controller.get_time()
     initialDate = input("Fecha inicial: ")
     inicial = datetime.datetime.strptime(initialDate, "%Y-%m-%dT%H:%M")
     i = inicial.date()
@@ -90,6 +91,9 @@ def print_req_1(control):
     final = datetime.datetime.strptime(finalDate, "%Y-%m-%dT%H:%M")
     f = final.date()
     a = controller.req_1(control, i, f)
+    end_time = controller.get_time()
+    elapsed_time = controller.delta_time(start_time, end_time)
+    print(f"Tiempo tomado para cargar: {elapsed_time} ms")
     return print(a)
 
 def print_req_2(control):
