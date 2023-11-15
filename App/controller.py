@@ -72,6 +72,9 @@ def get_data(control, id):
     #TODO: Llamar la función del modelo para obtener un dato
     pass
 
+def print_carga(control):
+    a = model.carga(control)
+    return a
 
 def req_1(control, initialDate, finalDate):
     """

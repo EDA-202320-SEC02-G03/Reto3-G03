@@ -57,12 +57,14 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
-    data = {"times": None,
+    data = {"carga": None,
+            "times": None,
             "magnitudes": None,
             "significance": None,
             "estacion": None,
             "fechas": None}
 
+    data["carga"] = lt.newList("ARRAY_LIST")
     data["times"] = om.newMap(omaptype="RBT")
     data["magnitudes"] = om.newMap(omaptype="RBT")
     data["significance"] = om.newMap(omaptype="RBT")
@@ -79,6 +81,7 @@ def add_data(data_structs, data):
     """
     Función para agregar nuevos elementos a la lista
     """
+    carga_datos(data_structs["carga"], data)
     updateDateIndex(data_structs["times"], data)
     updateMagIndex(data_structs["magnitudes"], data)
     updateSigIndex(data_structs["significance"], data)
@@ -105,6 +108,10 @@ def newDataEntry(sismo):
     entry["sismos"] = lt.newList("ARRAY_LIST")
     lt.addLast(entry["sismos"], sismo)
     return entry
+
+def carga_datos(lst, sismo):
+    lt.addLast(lst, sismo)
+    return lst
 
 def updateDateIndex(map, sismo):
     """
@@ -214,6 +221,29 @@ def data_size(data_structs):
     #TODO: Crear la función para obtener el tamaño de una lista
     pass
 
+def carga(data_structs):
+    x = data_structs["carga"]
+    a = [lt.getElement(x,lt.size(x)),
+         lt.getElement(x,lt.size(x)-1),
+         lt.getElement(x,lt.size(x)-2),
+         lt.getElement(x,lt.size(x)-3),
+         lt.getElement(x,lt.size(x)-4),
+         lt.getElement(x,5),
+         lt.getElement(x,4),
+         lt.getElement(x,3),
+         lt.getElement(x,2),
+         lt.getElement(x,1)]
+    head = ["code", "time", "lat", "long", "mag", "title", "depth", "felt", "cdi", "mmi", "tsunami"]
+    k = []
+    for seis in a:
+        l = {}
+        for header in head:
+            l[header] = seis[header]
+        k.append(l)
+    
+    t = tabulate(k, headers="keys", tablefmt="grid")
+    datos = lt.size(x)
+    return (t, datos)
 
 def req_1(data_structs, initialDate, finalDate):
     """

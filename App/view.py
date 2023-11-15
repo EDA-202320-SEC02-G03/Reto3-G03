@@ -41,7 +41,7 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-filename = "earthquakes//temblores-utf8-small.csv"
+filename = "earthquakes//temblores-utf8-large.csv"
 
 def new_controller():
     """
@@ -78,6 +78,10 @@ def print_data(control, id):
     """
     #TODO: Realizar la función para imprimir un elemento
     pass
+def print_carga(control):
+    a = controller.print_carga(control)
+    print("Se cargaron: " + str(a[1]) + " Datos")
+    return print(a[0])
 
 def print_req_1(control):
     """
@@ -214,6 +218,7 @@ if __name__ == "__main__":
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
             data = load_data(control)
+            print_carga(control)
         elif int(inputs) == 2:
             print_req_1(control)
 
