@@ -41,7 +41,7 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-filename = "earthquakes//temblores-utf8-large.csv"
+filename = "earthquakes//temblores-utf8-small.csv"
 
 def new_controller():
     """
@@ -147,8 +147,20 @@ def print_req_5(control):
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    pass
-
+    start_time = controller.get_time()
+    print("=============Req No. 5 Inputs =============")
+    profundidad = float(input("Min depth: "))
+    estacion = float(input("Max nst (seismic stations): "))
+    print("=============Req No. 5 Results =============")
+    a,tam = controller.req_5(control, profundidad, estacion)
+    end_time = controller.get_time()
+    elapsed_time = controller.delta_time(start_time, end_time)
+    print(f"Tiempo tomado para cargar: {elapsed_time} ms")
+    print("Total different dates: ", tam)
+    print("Total events between dates:", tam)
+    print("Selectin the first 20 results...")
+    print("Counsult size: ", tam, "The first and last 3 of the 20 results are: ")
+    return print(a)
 
 def print_req_6(control):
     """

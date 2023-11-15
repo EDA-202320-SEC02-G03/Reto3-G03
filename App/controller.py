@@ -102,12 +102,13 @@ def req_4(control, sig, distancia):
     a = model.req_4(control, sig, distancia)
     return a
 
-def req_5(control):
+def req_5(control, profundidad, estacion):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
+    a,tam = model.req_5(control, profundidad, estacion)
+    return a,tam
 
 def req_6(control):
     """

@@ -60,11 +60,13 @@ def new_data_structs():
     data = {"times": None,
             "magnitudes": None,
             "significance": None,
+            "estacion": None,
             "fechas": None}
 
     data["times"] = om.newMap(omaptype="RBT")
     data["magnitudes"] = om.newMap(omaptype="RBT")
     data["significance"] = om.newMap(omaptype="RBT")
+    data["estacion"] = om.newMap(omaptype="RBT")
     data["fechas"] = mp.newMap(50000,
                                    maptype='CHAINING',
                                    loadfactor=4)
@@ -80,6 +82,7 @@ def add_data(data_structs, data):
     updateDateIndex(data_structs["times"], data)
     updateMagIndex(data_structs["magnitudes"], data)
     updateSigIndex(data_structs["significance"], data)
+    updateEstacionIndex(data_structs["estacion"], data)
     addFechas(data_structs["fechas"], data)
 
     return data_structs
@@ -182,6 +185,17 @@ def updateProfundidadIndex(map, sismo):
         lt.addLast(lst, sismo)
     return map
     
+def updateEstacionIndex(map, sismo):
+    nst = int(sismo["nst"])
+    entry = om.get(map, nst)
+    if entry is None:
+        datentry = newDataEntry(sismo)
+        om.put(map, nst, datentry)
+    else:
+        datentry = me.getValue(entry)
+        lst = datentry["sismos"]
+        lt.addLast(lst, sismo)
+    return map
 
 # Funciones de consulta
 
@@ -366,12 +380,48 @@ def req_4(data_structs, sig, distancia):
     
     return t
 
-def req_5(data_structs):
+def req_5(data_structs, profundidad, estacion):
     """
     Función que soluciona el requerimiento 5
     """
     # TODO: Realizar el requerimiento 5
-    pass
+    lst = om.values(data_structs["estacion"], estacion, om.minKey(data_structs["estacion"]))
+    lst2 = lt.newList("ARRAY_LIST")
+    for i in lt.iterator(lst):
+        for j in lt.iterator(i["sismos"]):
+            lt.addLast(lst2, j)
+    prof = om.newMap(omaptype="RBT")
+    for k in lt.iterator(lst2):
+        if k["depth"] != "":
+            updateProfundidadIndex(prof, k)
+    lst = om.values(prof, om.maxKey(prof), profundidad)
+    lst2 = lt.newList("ARRAY_LIST")
+    for l in lt.iterator(lst2):
+        for m in lt.iterator(l["sismos"]):
+            lt.addLast(lst2, m)
+    tamanio = lt.size(lst2)
+    sorteo = quk.sort(lst2, compare_dates)
+    lprint = [lt.getElement(sorteo, lt.size(sorteo)),
+              lt.getElement(sorteo, lt.size(sorteo)-1),
+              lt.getElement(sorteo, lt.size(sorteo)-2),
+              lt.getElement(sorteo, lt.size(sorteo)-17),
+              lt.getElement(sorteo, lt.size(sorteo)-18),
+              lt.getElement(sorteo, lt.size(sorteo)-19)]
+    
+    head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    w = []
+    for x in lprint:
+        y = {}
+        for header in head:
+            y[header] = x[header]
+        z = tabulate([1], headers="keys", tablefmt="grid")
+        date = x["time"]
+        events = 1
+        lista = [date, events, z]
+        w.append(lista)
+        
+    tab = tabulate(w, headers=["time", "events", "details"], tablefmt="grid")
+    return tab,tamanio
 
 
 def req_6(data_structs):
