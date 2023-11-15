@@ -54,14 +54,14 @@ def new_controller():
 def print_menu():
     print("Bienvenido")
     print("1- Cargar información")
-    print("2- Ejecutar Requerimiento 1")
-    print("3- Ejecutar Requerimiento 2")
-    print("4- Ejecutar Requerimiento 3")
-    print("5- Ejecutar Requerimiento 4")
-    print("6- Ejecutar Requerimiento 5")
-    print("7- Ejecutar Requerimiento 6")
-    print("8- Ejecutar Requerimiento 7")
-    print("9- Ejecutar Requerimiento 8")
+    print("2- Conocer los eventos sísmicos entre dos fechas")
+    print("3- Conocer los eventos sísmicos entre dos magnitudes")
+    print("4- Consultar los 10 eventos más recientes según una magnitud y profundidad indicadas")
+    print("5- Consultar los 15 eventos sísmicos más recientes según su significancia y una distancia azimutal")
+    print("6- Consultar los 20 eventos más recientes para una profundidad dada y registrados por un cierto número de estaciones")
+    print("7- Reportar el evento más significativo y los N eventos más próximos en el área alrededor de un punto indicado")
+    print("8- Graficar un histograma anual de los eventos ocurridos según la región y propiedades de los eventos")
+    print("9- Visualizar los eventos sísmicos de cada requerimiento en un mapa interactivo")
     print("0- Salir")
 
 
@@ -162,7 +162,7 @@ def print_req_5(control):
     print(f"Tiempo tomado para cargar: {elapsed_time} ms")
     print("Total different dates: ", tam)
     print("Total events between dates:", tam)
-    print("Selectin the first 20 results...")
+    print("Selecting the first 20 results...")
     print("Counsult size: ", tam, "The first and last 3 of the 20 results are: ")
     return print(a)
 
