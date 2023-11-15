@@ -415,7 +415,7 @@ def req_5(data_structs, profundidad, estacion):
     Función que soluciona el requerimiento 5
     """
     # TODO: Realizar el requerimiento 5
-    lst = om.values(data_structs["estacion"], estacion, om.minKey(data_structs["estacion"]))
+    lst = om.values(data_structs["estacion"], str(estacion), om.minKey(data_structs["estacion"]))
     lst2 = lt.newList("ARRAY_LIST")
     for i in lt.iterator(lst):
         for j in lt.iterator(i["sismos"]):
