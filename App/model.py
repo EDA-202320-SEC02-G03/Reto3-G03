@@ -186,7 +186,7 @@ def updateProfundidadIndex(map, sismo):
     return map
     
 def updateEstacionIndex(map, sismo):
-    nst = int(sismo["nst"])
+    nst = sismo["nst"]
     entry = om.get(map, nst)
     if entry is None:
         datentry = newDataEntry(sismo)
@@ -356,13 +356,13 @@ def req_4(data_structs, sig, distancia):
     for cada in lt.iterator(lst):
         for elements in lt.iterator(cada["sismos"]):
             lt.addLast(x, elements)
-    o = quk.sort(x, compare_dates)
-    a = [lt.getElement(o,lt.size(o)),
-         lt.getElement(o,lt.size(o)-1),
-         lt.getElement(o,lt.size(o)-2),
-         lt.getElement(o,3),
+    o = lt.subList(quk.sort(x, compare_dates_inv),1,15)
+    a = [lt.getElement(o,1),
          lt.getElement(o,2),
-         lt.getElement(o,1)]
+         lt.getElement(o,3),
+         lt.getElement(o,lt.size(o)),
+         lt.getElement(o,lt.size(o)-1),
+         lt.getElement(o,lt.size(o)-2)]
     head = ["mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
     k = []
     for seis in a:
@@ -495,6 +495,18 @@ def compare_dates(date1, date2):
     else:
         return date1<date2
 
+def compare_dates_inv(date1, date2):
+    """
+    Compara dos fechas
+    """
+    date1 = datetime.datetime.strptime(date1["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    date2 = datetime.datetime.strptime(date2["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    d1 = str(date1.date())
+    d2 = str(date2.date())
+    if (d1 > d2):
+        return d1>d2
+    else:
+        return date1>date2
 # Funciones de ordenamiento
 
 
