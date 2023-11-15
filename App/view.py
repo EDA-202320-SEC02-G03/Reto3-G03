@@ -41,7 +41,7 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-filename = "earthquakes//temblores-utf8-small.csv"
+filename = "earthquakes//temblores-utf8-large.csv"
 
 def new_controller():
     """
@@ -100,9 +100,13 @@ def print_req_2(control):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
+    start_time = controller.get_time()
     mag_ini = float(input("Magnitud inicial: "))
     mag_fin = float(input("Magnitud final: "))
     a = controller.req_2(control, mag_ini, mag_fin)
+    end_time = controller.get_time()
+    elapsed_time = controller.delta_time(start_time, end_time)
+    print(f"Tiempo tomado para cargar: {elapsed_time} ms")
     return print(a)
 
 def print_req_3(control):
@@ -110,23 +114,32 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
+    start_time = controller.get_time()
     print("=============Req No. 3 Inputs =============")
     magnitud = float(input("Min magnitud: "))
     profundidad =float(input("Max Depth: "))
     print("=============Req No. 3 Results =============")
     a,length1 = controller.req_3(control,magnitud,profundidad)
+    end_time = controller.get_time()
+    elapsed_time = controller.delta_time(start_time, end_time)
+    print(f"Tiempo tomado para cargar: {elapsed_time} ms")
     print("Total different dates: ", length1)
     print("Total events between dates:",length1)
     print("Selectin the first 10 results...")
     print("Counsult size: ", length1, "The first an last 3 of the 10 results are: ")
     return print(a)
+
 def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
+    start_time = controller.get_time()
     sig = int(input("Ingrese la significancia minima: "))
     distancia = float(input("Ingrese la distancia azimutal maxima: "))
     a = controller.req_4(control, sig, distancia)
+    end_time = controller.get_time()
+    elapsed_time = controller.delta_time(start_time, end_time)
+    print(f"Tiempo tomado para cargar: {elapsed_time} ms")
     return print(a)
 
 def print_req_5(control):
@@ -149,11 +162,15 @@ def print_req_7(control):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
+    start_time = controller.get_time()
     año = str(input("Year: "))
     titulo = str(input("Area of interest: "))
     propiedad = str(input("property of interest (mag/ Depth/ sig): "))
     bins = int(input("Number of bins: "))
     a = controller.req_7(control, año, titulo, propiedad, bins)
+    end_time = controller.get_time()
+    elapsed_time = controller.delta_time(start_time, end_time)
+    print(f"Tiempo tomado para cargar: {elapsed_time} ms")
     plt.hist(a[0], bins, density=True)
     plt.title("Histogram of " + propiedad + " in " + titulo + " in " + año)
     plt.xlabel(propiedad)
