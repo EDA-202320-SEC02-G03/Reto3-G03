@@ -154,7 +154,7 @@ def print_req_5(control):
     start_time = controller.get_time()
     print("=============Req No. 5 Inputs =============")
     profundidad = float(input("Min depth: "))
-    estacion = float(input("Max nst (seismic stations): "))
+    estacion = str(input("Max nst (seismic stations): "))
     print("=============Req No. 5 Results =============")
     a,tam = controller.req_5(control, profundidad, estacion)
     end_time = controller.get_time()
